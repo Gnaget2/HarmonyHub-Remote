@@ -36,7 +36,7 @@ frontend:
   extra_html_url:
     - /local/custom_ui/state-card-tiles.html
   extra_html_url_es5:
-    - /local/custom_ui/state-card-tiles_es5.html
+    - /local/custom_ui/state-card-tiles.html
 ```
 - Restart HASS and start using it.
 
