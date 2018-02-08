@@ -1,0 +1,338 @@
+##################################################################################################
+# Harmony hub remote heater package                                                              #
+# Version 1.0. last changed 2018-02-08                                                           #
+# Created for and tested with Home Assistant Hassio version 0.62.1                               #
+# Creator Mikael Danell SHG                                                                      #
+# Inspiration and code from:                                                                     #
+# https://github.com/c727/home-assistant-tiles                                                   #
+##################################################################################################
+
+homeassistant:
+  customize:
+    input_text.harmony_remote:
+      custom_ui_state_card: state-card-tiles
+      config:
+        columns: 4
+        column_width: 82px
+        row_height: 80px
+        entities:
+        - entity: script.harmony_exit
+          label: Exit
+          column: 1
+          row: 1
+        - entity: script.harmony_upp
+          icon: mdi:chevron-up
+          column: 2
+          row: 1
+        - entity: script.harmony_menu
+          label: Meny
+          column: 3
+          row: 1
+        - entity: script.harmony_ljud_upp
+          icon: mdi:volume-plus
+          column: 4
+          row: 1
+        - entity: script.harmony_left
+          icon: mdi:chevron-left
+          column: 1
+          row: 2
+        - entity: script.harmony_ok
+          label: OK
+          column: 2
+          row: 2
+        - entity: script.harmony_right
+          icon: mdi:chevron-right
+          column: 3
+          row: 2
+        - entity: script.harmony_ljud_ner
+          icon: mdi:volume-minus
+          column: 4
+          row: 2
+        - entity: script.harmony_mute
+          icon: mdi:volume-off
+          column: 1
+          row: 3
+        - entity: script.harmony_ner
+          icon: mdi:chevron-down
+          column: 2
+          row: 3
+        - entity: script.harmony_prev
+          icon: mdi:keyboard-return
+          column: 3
+          row: 3
+        - entity: script.harmony_channel_up
+          icon: mdi:arrow-up-bold
+          column: 4
+          row: 3
+        - entity: script.harmony_power
+          icon: mdi:power
+          column: 1
+          row: 4
+        - entity: script.harmony_rec
+          icon: mdi:record-rec
+          column: 2
+          row: 4
+        - entity: script.harmony_guide
+          label: Guide
+          column: 3
+          row: 4
+        - entity: script.harmony_channel_down
+          icon: mdi:arrow-down-bold
+          column: 4
+          row: 4
+
+# Automation section
+automation:
+# 
+  - alias: 'Update input select'
+    trigger:
+      platform: state
+      entity_id: remote.Hub1
+    action:
+      service: input_select.select_option
+      data_template:
+        entity_id: input_select.living_room_tv
+        option: '{{ states.remote.Hub1.attributes.current_activity }}'
+
+  - alias: 'Start activity from input select'
+    trigger:
+      platform: state
+      entity_id: input_select.living_room_tv
+    action:
+      service: script.turn_on
+      entity_id: script.input_select_harmony
+
+#input select (drop down options)
+input_select:
+  living_room_tv:
+    name: Harmony aktivitet
+    options:
+      - PowerOff
+      - TV
+      - Xbox
+      - ATV3
+      - Film
+      - AirPlay
+      - None
+    initial: None
+    icon: mdi:play-box-outline
+#used for state card
+input_text:
+  harmony_remote:
+    name: HarmonyRemote
+
+# Sensor section
+# show current activity from harmony hub, make shore to rename the "Hub1" part to match your device
+sensor:
+  - platform: template
+    sensors:
+      family_room:
+        value_template: '{{ states.remote.Hub1.attributes.current_activity }}'
+        friendly_name: 'Media'
+
+# Group section
+group:
+
+  Media view:
+    view: yes
+    name: Media
+    icon: mdi:play-pause
+    entities:
+      - group.Harmony
+
+  Harmony:
+    name: "Harmony remote"
+    entities:
+      - input_text.harmony_remote
+      - input_select.living_room_tv
+
+
+# Script section
+script:
+# starts harmony activity based on selected input 
+  input_select_harmony:
+    alias: "Start activity from input select"
+    sequence:
+      - service: remote.turn_on
+        data_template:
+          entity_id: remote.hub1
+          activity: >
+            {% if is_state("input_select.living_room_tv", "PowerOff") %}
+                -1
+            {% elif is_state("input_select.living_room_tv", "TV") %}
+                13507786
+            {% elif is_state("input_select.living_room_tv", "Xbox") %}
+                23688854
+            {% elif is_state("input_select.living_room_tv", "ATV3") %}
+                13507990
+            {% elif is_state("input_select.living_room_tv", "Film") %}
+                29039108
+            {% elif is_state("input_select.living_room_tv", "AirPlay") %}
+                30143777
+            {% endif %}
+
+  harmony_channel_down:
+    alias: "Kanal ner"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - ChannelDown
+
+  harmony_channel_up:
+    alias: "Kanal upp"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - ChannelUp
+
+  harmony_exit:
+    alias: "Exit"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - Exit
+
+  harmony_guide:
+    alias: "Guide"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - Guide
+
+  harmony_left:
+    alias: "Vänster"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - DirectionLeft
+
+  harmony_ljud_ner:
+    alias: "Ljud ner"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 26119303
+          command:
+            - VolumeDown
+            - VolumeDown
+            - VolumeDown
+            - VolumeDown
+            - VolumeDown
+
+  harmony_ljud_upp:
+    alias: "Ljud upp"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 26119303
+          command:
+            - VolumeUp
+            - VolumeUp
+            - VolumeUp
+            - VolumeUp
+            - VolumeUp
+
+  harmony_menu:
+    alias: "Meny"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - Menu
+
+  harmony_mute:
+    alias: "Mute"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 26119303
+          command:
+            - Mute
+
+  harmony_ner:
+    alias: "Ner"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - DirectionDown
+
+  harmony_ok:
+    alias: "OK"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - Select
+
+  harmony_power:
+    alias: "Power"
+    sequence:
+      - service: remote.turn_on
+        data:
+          entity_id: remote.Hub1
+          activity: -1
+
+  harmony_rec:
+    alias: "Rec"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - Record
+
+  harmony_prev:
+    alias: "PrevCh"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - PrevChannel
+
+  harmony_right:
+    alias: "Höger"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - DirectionRight
+
+  harmony_upp:
+    alias: "Upp"
+    sequence:
+      - service: remote.send_command
+        data:
+          entity_id: remote.Hub1
+          device: 37782842
+          command:
+            - DirectionUp
