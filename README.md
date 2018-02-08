@@ -3,4 +3,4 @@ Control your Harmony hub from Home Assistant
 
 
 ## My gui
-<img src="https://github.com/Gnaget2/HarmonyHub-Remote/blob/master/Images/Screenshot.PNG" alt="Screenshot" />
+<img src="https://github.com/Gnaget2/HarmonyHub-Remote/blob/master/Images/Screenshot.png" alt="Screenshot" />
