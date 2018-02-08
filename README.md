@@ -14,8 +14,8 @@ Its created as a [Home Assistant package](https://home-assistant.io/docs/configu
 ## Installation
 - If your installation doesn’t already support the use of [packages](https://home-assistant.io/docs/configuration/packages/) please activate it.
 - Place `harmony_remote.yaml` in your package folder
-- Edit `harmony_remote.yaml` and replace all instances of the name of the remote to match your remote, in the example its called `Hub1`, your name you can find by looking at the file `harmony_XXXXXXX.conf` in your `<Config dir>` where XXXXXXX is your name. tip is to search and replace all hub1 valus to your name.
-- Open `harmony_XXXXXXX.conf` in your `<Config dir>` and make a note of all your activity names and activity IDs. The example have the following.
+- Edit `harmony_remote.yaml` and replace all instances of the name of the remote to match your remote, in the example it’s called `Hub1`, your name you can find by looking at the file `harmony_XXXXXXX.conf` in your `<Config dir>` where XXXXXXX is your name. tip is to search and replace all hub1 values to your name.
+- Open `harmony_XXXXXXX.conf` in your `<Config dir>` and make a note of all your activity names and activity IDs. The example has the following.
   ```
   Activities
   13507786 - TV
@@ -27,7 +27,7 @@ Its created as a [Home Assistant package](https://home-assistant.io/docs/configu
   23688854 - Xbox
   ```
   -Edit the `harmony_remote.yaml`and the section `input_select:`so that the options match your activitys, add or remove lines if needed.
-- Edit the `input_select_harmony` script so that the names and activitys match your names and IDs
+- Edit the `input_select_harmony` script so that the names and activity’s match your names and IDs
 - Edit the rest if the scripts with ID for the device the command should be sent to and what command to send, see your `harmony_XXXXXXX.conf` file for ID for each device and its commands.
 - Download `/www/custom_ui/state-card-tiles.html` to `<config-dir>/www/custom_ui/`
 - Add to your `configuration.yaml`:
@@ -41,12 +41,11 @@ frontend:
 - Restart HASS and start using it.
 
 
-
 ## Change log
 
 #### 1.0
 First release
-Can start several activitys but only control one, support for several activitys will come in next version
+Can start several activity’s but only control one, support for several activity’s will come in next version
 
 
 
