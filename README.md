@@ -1,4 +1,4 @@
-# HarmonyHub-Remote
+# HarmonyHub-Remote 1.1
 Control your Harmony hub from Home Assistant
 
 ## Description
@@ -28,7 +28,7 @@ Its created as a [Home Assistant package](https://home-assistant.io/docs/configu
   ```
   -Edit the `harmony_remote.yaml`and the section `input_select:`so that the options match your activitys, add or remove lines if needed.
 - Edit the `input_select_harmony` script so that the names and activity’s match your names and IDs
-- Edit the rest if the scripts with ID for the device the command should be sent to and what command to send, see your `harmony_XXXXXXX.conf` file for ID for each device and its commands.
+- Edit the rest if the scripts with names, ID for the device the command should be sent to and what command to send, see your `harmony_XXXXXXX.conf` file for ID for each device and its commands.
 - Download `/www/custom_ui/state-card-tiles.html` to `<config-dir>/www/custom_ui/`
 - Add to your `configuration.yaml`:
 ```yaml
@@ -42,6 +42,9 @@ frontend:
 
 
 ## Change log
+
+#### 1.1
+Added supprt for controling all of your activitys with a data template that sends different commands to differnet devices depending of the current activity
 
 #### 1.0
 First release
